@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "test": "npx mocha -w --parallel test/*.test.js",
+    "test:cov": "npx nyc npx mocha --parallel /test/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +15,8 @@
     "chai": "^4.3.6",
     "mocha": "^8.4.0",
     "nyc": "^15.1.0"
+  },
+  "dependencies": {
+    "pdf-parse": "^1.1.1"
   }
 }
