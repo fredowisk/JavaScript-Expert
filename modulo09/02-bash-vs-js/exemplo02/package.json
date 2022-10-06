@@ -1,0 +1,16 @@
+{
+  "name": "exemplo02",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx zx index.mjs"
+  },
+  "keywords": [],
+  "author": "fredowisk",
+  "license": "ISC",
+  "dependencies": {
+    "safe-regex": "^2.1.1",
+    "zx": "^7.0.8"
+  }
+}
