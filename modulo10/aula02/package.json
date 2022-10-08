@@ -1,0 +1,20 @@
+{
+  "name": "@fredowisk/aula02",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start-server": "mkdir logs && node webApi.js",
+    "api1": "curl localhost:3000 | tee logs/api1.log",
+    "api2": "curl localhost:4000 | tee logs/api2.log",
+    "example": "node examples/1.concat-streams.pass-through.js | tee logs/example.log",
+    "example2": "node examples/2.async-streams.js | tee logs/example2.log"
+  },
+  "keywords": [],
+  "author": "fredowisk",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.1.2"
+  }
+}
