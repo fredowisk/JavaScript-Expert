@@ -1,0 +1,62 @@
+[
+  {
+    "pokemonName": "bulbasaur",
+    "moves": [
+      {
+        "move": {
+          "name": "razor-wind"
+        }
+      },
+      {
+        "move": {
+          "name": "swords-dance"
+        }
+      },
+      {
+        "move": {
+          "name": "cut"
+        }
+      }
+    ]
+  },
+  {
+    "pokemonName": "ivysaur",
+    "moves": [
+      {
+        "move": {
+          "name": "razor-wind"
+        }
+      },
+      {
+        "move": {
+          "name": "swords-dance"
+        }
+      },
+      {
+        "move": {
+          "name": "cut"
+        }
+      }
+    ]
+  },
+  {
+    "pokemonName": "venusaur",
+    "moves": [
+      {
+        "move": {
+          "name": "razor-wind"
+        }
+      },
+      {
+        "move": {
+          "name": "swords-dance"
+        }
+      },
+      {
+        "move": {
+          "name": "cut"
+        }
+      }
+    ]
+  }
+]

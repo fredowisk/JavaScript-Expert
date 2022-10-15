@@ -1,0 +1,20 @@
+{
+  "forms": [{ "name": "bulbasaur" }],
+  "moves": [
+    {
+      "move": {
+        "name": "razor-wind"
+      }
+    },
+    {
+      "move": {
+        "name": "swords-dance"
+      }
+    },
+    {
+      "move": {
+        "name": "cut"
+      }
+    }
+  ]
+}
