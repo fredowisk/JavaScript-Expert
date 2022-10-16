@@ -1,14 +1,18 @@
 import { createServer } from "http";
+import TeamRepository from "./repository/teamRepository";
 import TeamService from "./service/teamService";
 
 async function teamRoute(request, response) {
-  response.writeHead(200);
+  const teamRepository = new TeamRepository();
+  const teamService = new TeamService(teamRepository);
 
-  const teamService = new TeamService();
+  const team = await teamService.getRandomTeam();
 
-  const data = await teamService.getRandomPokemons();
-  
-  response.write(JSON.stringify(data))
+  response.writeHead(200, {
+    "Content-Type": "application/json",
+  });
+
+  response.write(JSON.stringify(team));
   return response.end();
 }
 
@@ -21,7 +25,7 @@ function handler(request, response) {
   const { url } = request;
 
   if (url === "/team") {
-    return teamRoute(request, response)
+    return teamRoute(request, response);
   }
 
   return defaultRoute(request, response);

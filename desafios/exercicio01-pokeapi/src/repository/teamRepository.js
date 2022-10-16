@@ -14,8 +14,8 @@ export default class TeamRepository {
 
   async getPokemon(pokemonNameOrId) {
     const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonNameOrId}`;
-    const {forms: [{name: pokemonName}], moves} = await this.makeRequest(pokemonUrl);
+    const {name, moves} = await this.makeRequest(pokemonUrl);
 
-    return { pokemonName, moves };
+    return { name, moves };
   }
 }

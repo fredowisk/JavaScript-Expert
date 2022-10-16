@@ -17,7 +17,7 @@ Deve retornar um array com 3 pokemóns aleatórios, contendo seus respectivos `n
 ### Testes
 
 * [X] mocks
-* [ ] stubs
+* [X] stubs
 * [X] spies
 * [X] testes end-2-end
 * [X] testes unitários

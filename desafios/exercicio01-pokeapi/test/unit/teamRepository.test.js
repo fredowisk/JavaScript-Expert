@@ -10,12 +10,13 @@ describe("#Team Repository Test Suite", () => {
 
   test("should use the pokeApi to get information about the chosen pokemon", async () => {
     const teamRepository = new TeamRepository();
+    const pokemonName = "bulbasaur";
+    const mockUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
 
     const requestSpy = jest.spyOn(teamRepository, "makeRequest").mockResolvedValue(pokemonMock);
 
-    const pokemonName = "bulbasaur";
 
-    const { pokemonName: name, moves } = await teamRepository.getPokemon(
+    const { name, moves } = await teamRepository.getPokemon(
       pokemonName
     );
 
@@ -26,6 +27,6 @@ describe("#Team Repository Test Suite", () => {
     expect(move2.move.name).toStrictEqual("swords-dance");
     expect(move3.move.name).toStrictEqual("cut");
     expect(name).toStrictEqual(pokemonName);
-    expect(requestSpy).toHaveBeenCalledWith(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+    expect(requestSpy).toHaveBeenCalledWith(mockUrl)
   });
 });

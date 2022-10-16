@@ -1,26 +1,28 @@
-import TeamRepository from "../repository/teamRepository";
-
 export default class TeamService {
-  constructor() {
+  constructor(teamRepository) {
+    this.teamRepository = teamRepository;
     this.totalNumberOfPokemons = 898;
+    this.teamLength = 3
     this.team = [];
+  }
+
+  getRandomId() {
+    return Math.ceil(Math.random() * this.totalNumberOfPokemons);
   }
 
   formatPokemonMoves(moves) {
     return moves.slice(0, 3).map(({ move: { name } }) => name);
   }
 
-  async getRandomPokemons() {
-    for (let index = 0; index < 3; index++) {
-      const randomId = Math.ceil(Math.random() * this.totalNumberOfPokemons);
+  async getRandomTeam() {
+    for (let index = 0; index < this.teamLength; index++) {
+      const randomId = this.getRandomId();
 
-      const teamRepository = new TeamRepository();
+      const { name, moves } = await this.teamRepository.getPokemon(randomId);
 
-      const { pokemonName, moves } = await teamRepository.getPokemon(randomId);
+      const newMoves = this.formatPokemonMoves(moves);
 
-      const newMoves = this.formatPokemonMoves(moves)
-
-      this.team.push({ pokemonName, moves: newMoves });
+      this.team.push({ name, moves: newMoves });
     }
 
     return this.team;
