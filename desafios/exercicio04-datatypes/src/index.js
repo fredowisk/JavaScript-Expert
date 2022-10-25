@@ -3,7 +3,8 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { server } from "./producer-server.js";
-import mainLoop from "./producer-cli.js";
+
+import ProducerCLI from "./producer-cli.js";
 
 const { DEFAULT_PORT } = process.env;
 
@@ -18,5 +19,7 @@ const { port } = yargs(hideBin(process.argv))
 
 server.listen(port, async () => {
   console.info("🚀 Producer server successfully started on port: " + port);
-  await mainLoop();
+  
+  const producer = new ProducerCLI();
+  await producer.initialize();
 });
