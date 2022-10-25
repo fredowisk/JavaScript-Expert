@@ -1,0 +1,27 @@
+{
+  "name": "@fredowisk/exercicio05-regexp",
+  "version": "1.0.0",
+  "description": "Facade/Fluent API based application to extract useful information from governmental csv files using regexps.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --no-cache --watch --config jest.config.mjs --detectOpenHandles",
+    "test:cov": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --config jest.config.mjs --coverage --detectOpenHandles"
+  },
+  "keywords": [
+    "RegExp",
+    "Regular Expressions",
+    "Facade",
+    "Fluent API",
+    "Challenge",
+    "Code Challenge"
+  ],
+  "author": "fredowisk",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.2.2"
+  },
+  "dependencies": {
+    "safe-regex": "^2.1.1"
+  }
+}
