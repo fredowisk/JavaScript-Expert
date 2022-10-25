@@ -9,16 +9,20 @@ export default class ConsumerCLI {
     this.selectedCrypto = null;
   }
 
-  initialize() {
+  selectCrypto(crypto) {
+    this.terminal.addDataToPrint([crypto]);
+    this.selectedCrypto = crypto;
+    this.terminal.success("New data available, [press Enter] to fetch");
+  }
+
+  async initialize() {
     this.terminal.initialize();
 
     this.socket.on("selected", async ({ crypto }) => {
-      this.terminal.addDataToPrint([crypto]);
-      this.selectedCrypto = crypto;
-      this.terminal.success("New data available, [press Enter] to fetch");
+      this.selectCrypto(crypto);
     });
 
-    return this.mainLoop();
+    await this.mainLoop();
   }
 
   showPercentageVariation() {
@@ -57,31 +61,31 @@ export default class ConsumerCLI {
   }
 
   async selectRegister(id) {
-    this.terminal.success("Selecting register...");
-    await this.terminal.wait(100);
+      this.terminal.success("Selecting register...");
+      await this.terminal.wait(100);
 
-    const data = this.terminal.getDataById(Number(id));
+      const data = this.terminal.getDataById(Number(id));
 
-    if (!data) throw new RangeError(`No register found for id [${id || ""}]`);
+      if (!data) throw new RangeError(`No register found for id [${id || ""}]`);
 
-    this.selectedCrypto = data;
+      this.selectedCrypto = data;
 
-    this.terminal.success("Register selected successfully!");
-    await this.terminal.wait(500);
+      this.terminal.success("Register selected successfully!");
+      await this.terminal.wait(500);
   }
 
   async removeRegister(id) {
-    this.terminal.success("Removing register from your wallet...");
-    await this.terminal.wait(100);
+      this.terminal.success("Removing register from your wallet...");
+      await this.terminal.wait(100);
 
-    const data = this.terminal.removeDataById(Number(id));
+      const data = this.terminal.removeDataById(Number(id));
 
-    if (!data) throw new RangeError(`No register found for [${id || ""}]`);
+      if (!data) throw new RangeError(`No register found for [${id || ""}]`);
 
-    this.selectedCrypto = null;
+      this.selectedCrypto = null;
 
-    this.terminal.success("Register removed successfully!");
-    await this.terminal.wait(1000);
+      this.terminal.success("Register removed successfully!");
+      await this.terminal.wait(1000);
   }
 
   async updateTerminal() {
@@ -90,21 +94,25 @@ export default class ConsumerCLI {
   }
 
   async executeCommand(command, id) {
-    const COMMANDS = {
-      stop: this.stopLoop,
-      select: this.selectRegister,
-      remove: this.removeRegister,
-      update: this.updateTerminal,
-    };
+    try {
+      const COMMANDS = {
+        stop: this.stopLoop,
+        select: this.selectRegister,
+        remove: this.removeRegister,
+        update: this.updateTerminal,
+      };
 
-    const execute = COMMANDS[command];
+      const execute = COMMANDS[command];
 
-    if (!execute) {
-      await COMMANDS["update"].call(this);
-      return;
+      if (!execute) {
+        await COMMANDS["update"].call(this);
+        return;
+      }
+
+      await execute.call(this, id);
+    } catch (error) {
+      throw error;
     }
-
-    await execute.call(this, id);
   }
 
   async mainLoop() {

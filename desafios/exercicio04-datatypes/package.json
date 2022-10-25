@@ -13,8 +13,8 @@
     "consumer": "node --experimental-json-modules --experimental-top-level-await src/consumer-cli.js",
     "consumer:dev": "nodemon --exec npm run consumer",
     "provider": "npx json-server --watch src/provider-server.json --port 3001",
-    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --no-cache --watch --config jest.config.mjs",
-    "test:cov": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --config jest.config.mjs --coverage"
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --no-cache --watch --config jest.config.mjs --detectOpenHandles",
+    "test:cov": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --config jest.config.mjs --coverage --detectOpenHandles"
   },
   "dependencies": {
     "asciichart": "^1.5.25",

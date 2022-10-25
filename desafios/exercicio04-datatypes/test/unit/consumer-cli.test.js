@@ -3,6 +3,7 @@ import {
   test,
   jest,
   beforeEach,
+  afterEach,
   afterAll,
   expect,
 } from "@jest/globals";
@@ -15,9 +16,16 @@ describe("#Consumer CLI Test Suite", () => {
     log: jest.fn(),
   };
 
+  let consumer;
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
+    consumer = new ConsumerCLI();
+  });
+
+  afterEach(() => {
+    consumer.socket.disconnect();
   });
 
   afterAll(() => {
@@ -25,8 +33,6 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should execute the mainLoop when call initialize", () => {
-    const consumer = new ConsumerCLI();
-
     const loopSpy = jest.spyOn(consumer, "mainLoop").mockResolvedValue();
 
     consumer.initialize();
@@ -34,8 +40,14 @@ describe("#Consumer CLI Test Suite", () => {
     expect(loopSpy).toHaveBeenCalled();
   });
 
+  test("should add a crypto when call selectCrypto", () => {
+    const [crypto] = cryptoMock;
+    consumer.selectCrypto(crypto);
+
+    expect(consumer.selectedCrypto).toStrictEqual(crypto);
+  });
+
   test("should execute plotQuoteChart with USD quote when call showPercentageVariation", () => {
-    const consumer = new ConsumerCLI();
     const [crypto] = cryptoMock;
 
     const plotQuoteChartSpy = jest.spyOn(consumer.terminal, "plotQuoteChart");
@@ -47,8 +59,6 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should execute initializeTable when call showWalletItems with a filled wallet", () => {
-    const consumer = new ConsumerCLI();
-
     jest.spyOn(consumer.terminal, "hasDataToPrint").mockReturnValue(true);
 
     const terminalSpy = jest
@@ -61,8 +71,6 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should execute stopLoop when call executeCommand with stop", async () => {
-    const consumer = new ConsumerCLI();
-
     process.exit = jest.fn();
     const stopSpy = jest.spyOn(consumer, "stopLoop");
     const closeSpy = jest.spyOn(consumer.terminal, "close").mockReturnValue();
@@ -76,15 +84,17 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should throw a RangeError when call selectRegister with an invalid id", async () => {
-    const consumer = new ConsumerCLI();
+    const errorMsg = "No register found for id []";
 
-    const promise = consumer.selectRegister();
+    jest.spyOn(consumer.terminal, "question").mockResolvedValue("select ");
+    const errorSpy = jest.spyOn(consumer.terminal, "error");
 
-    await expect(promise).rejects.toThrow(RangeError);
+    await consumer.mainLoop();
+
+    expect(errorSpy).toHaveBeenCalledWith(`Error@mainLoop: ${errorMsg} \n`);
   });
 
   test("should execute selectRegister when call executeCommand with select and id", async () => {
-    const consumer = new ConsumerCLI();
     const command = "select";
     const id = 1;
 
@@ -103,8 +113,6 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should throw a RangeError when call removeRegister with an invalid id", async () => {
-    const consumer = new ConsumerCLI();
-
     jest.spyOn(consumer.terminal, "wait").mockImplementation(() => {});
     const promise = consumer.removeRegister();
 
@@ -112,7 +120,6 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should execute removeRegister when call executeCommand with remove and id", async () => {
-    const consumer = new ConsumerCLI();
     const command = "remove";
     const id = 1;
 
@@ -127,8 +134,6 @@ describe("#Consumer CLI Test Suite", () => {
   });
 
   test("should call executeCommand when execute mainLoop", async () => {
-    const consumer = new ConsumerCLI();
-
     const [crypto] = cryptoMock;
 
     consumer.selectedCrypto = crypto;
@@ -136,13 +141,12 @@ describe("#Consumer CLI Test Suite", () => {
     const variationSpy = jest
       .spyOn(consumer, "showPercentageVariation")
       .mockReturnValue();
-      jest.spyOn(consumer.terminal, "wait").mockImplementation(() => {});
+
+    jest.spyOn(consumer.terminal, "wait").mockImplementation(() => {});
 
     jest.spyOn(consumer.terminal, "question").mockResolvedValue("test ");
 
-    const executeUpdateSpy = jest
-      .spyOn(consumer, "updateTerminal")
-      .mockResolvedValue();
+    const executeUpdateSpy = jest.spyOn(consumer, "updateTerminal");
 
     await consumer.mainLoop();
 

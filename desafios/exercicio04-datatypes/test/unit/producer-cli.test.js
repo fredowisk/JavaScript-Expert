@@ -4,10 +4,12 @@ import {
   jest,
   afterAll,
   beforeEach,
+  afterEach,
   expect,
 } from "@jest/globals";
 import ProducerCLI from "../../src/producer-cli";
 import cryptoMock from "../mocks/valid-crypto.json";
+import { io } from "../../src/producer-server.js";
 
 describe("#Producer CLI Test Suite", () => {
   const consoleCopy = console;
@@ -15,27 +17,56 @@ describe("#Producer CLI Test Suite", () => {
     log: jest.fn(),
   };
 
+  let producer;
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
+    producer = new ProducerCLI();
+  });
+
+  afterEach(() => {
+    io.close();
   });
 
   afterAll(() => {
     console = consoleCopy;
   });
 
-  test("should execute the mainLoop when call initialize", () => {
-    const producer = new ProducerCLI();
-
+  test("should execute the mainLoop when call initialize", async () => {
     const loopSpy = jest.spyOn(producer, "mainLoop").mockResolvedValue();
 
-    producer.initialize();
+    await producer.initialize();
 
     expect(loopSpy).toHaveBeenCalled();
   });
 
+  test("should add a user when call connectUser", () => {
+    const terminalSpy = jest.spyOn(producer.terminal, "success");
+    const id = 1;
+    const successMsg = `Real time update: user [${id}] connected!`;
+
+    expect(producer.users.hasUsers()).toStrictEqual(0);
+    producer.connectUser(id);
+
+    expect(producer.users.hasUsers()).toStrictEqual(1);
+    expect(terminalSpy).toHaveBeenCalledWith(successMsg);
+  });
+
+  test("should remove a user when call disconnectUser", () => {
+    const terminalSpy = jest.spyOn(producer.terminal, "error");
+    const id = 1;
+    const successMsg = `Real time update: user [${id}] disconnected!`;
+    producer.users.add({id});
+
+    expect(producer.users.hasUsers()).toStrictEqual(1);
+    producer.disconnectUser(id);
+
+    expect(producer.users.hasUsers()).toStrictEqual(0);
+    expect(terminalSpy).toHaveBeenCalledWith(successMsg);
+  })
+
   test("should list users when call listConnections", () => {
-    const producer = new ProducerCLI();
     const fakeUser = { id: 1 };
     producer.users.add(fakeUser);
 
@@ -52,8 +83,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should print the commands when call listCommands", () => {
-    const producer = new ProducerCLI();
-
     const commandsSpy = jest.spyOn(producer.terminal, "info");
 
     producer.listCommands();
@@ -62,8 +91,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should register a new page when call getNextPage", async () => {
-    const producer = new ProducerCLI();
-
     const addDataSpy = jest.spyOn(producer.terminal, "addDataToPrint");
 
     jest
@@ -76,8 +103,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should execute listRegisters when executeCommand is called without a command", async () => {
-    const producer = new ProducerCLI();
-
     const listSpy = jest.spyOn(producer, "listRegisters");
     const getNexPageSpy = jest
       .spyOn(producer, "getNextPage")
@@ -90,8 +115,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should execute stopLoop when executeCommand is called with stop", async () => {
-    const producer = new ProducerCLI();
-
     process.exit = jest.fn();
     const stopSpy = jest.spyOn(producer, "stopLoop");
     const closeSpy = jest.spyOn(producer.terminal, "close").mockReturnValue();
@@ -103,8 +126,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should throw a RangeError when call selectRegister without a valid id", async () => {
-    const producer = new ProducerCLI();
-
     jest.spyOn(producer.terminal, "wait").mockImplementation(() => {});
 
     const promise = producer.selectRegister();
@@ -113,7 +134,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should execute selectRegister when executeCommand is called with select", async () => {
-    const producer = new ProducerCLI();
     const command = "select";
     const id = 1;
     const [crypto] = cryptoMock;
@@ -132,7 +152,6 @@ describe("#Producer CLI Test Suite", () => {
   });
 
   test("should execute listConnections when call the mainLoop with users connected", async () => {
-    const producer = new ProducerCLI();
     const fakeUser = { id: 1 };
     producer.users.add(fakeUser);
 

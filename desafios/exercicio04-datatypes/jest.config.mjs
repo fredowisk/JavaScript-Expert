@@ -8,7 +8,11 @@ export default {
   coverageReporters: ["json", "text", "lcov", "clover"],
 
   //força um coverage para todos os arquivos
-  collectCoverageFrom: ["src/**/*.js", "!src/index.js", "!src/producer-server.js"],
+  collectCoverageFrom: [
+    "src/**/*.js",
+    "!src/index.js",
+    "!src/producer-server.js",
+  ],
 
   coverageThreshold: {
     global: {

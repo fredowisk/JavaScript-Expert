@@ -14,22 +14,28 @@ export default class ProducerCLI {
     this.users = new Users();
   }
 
-  initialize() {
+  connectUser(id) {
+    this.users.add({ id });
+    this.terminal.success(`Real time update: user [${id}] connected!`);
+  }
+
+  disconnectUser(id) {
+    this.users.remove(id);
+    this.terminal.error(`Real time update: user [${id}] disconnected!`);
+  }
+
+  async initialize() {
     this.terminal.initialize();
 
     io.on("connection", (socket) => {
-      this.users.add({ id: socket.id });
-      this.terminal.success(`Real time update: user [${socket.id}] connected!`);
+      this.connectUser(socket.id);
 
       socket.on("disconnect", () => {
-        this.users.remove(socket.id);
-        this.terminal.error(
-          `Real time update: user [${socket.id}] disconnected!`
-        );
+        this.disconnectUser(socket.id);
       });
     });
 
-    return this.mainLoop();
+    await this.mainLoop();
   }
 
   stopLoop() {
