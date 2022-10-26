@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Facade/Fluent API based application to extract useful information from governmental csv files using regexps.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js",
     "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --no-cache --watch --config jest.config.mjs --detectOpenHandles",
