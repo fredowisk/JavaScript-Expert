@@ -1,0 +1,21 @@
+{
+  "name": "@fredowisk/exercicio06-patterns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main/index.js",
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --no-cache --watch --config jest.config.mjs --detectOpenHandles",
+    "test:cov": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --config jest.config.mjs --coverage --detectOpenHandles"
+  },
+  "keywords": [],
+  "author": "fredowisk",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.2.2"
+  },
+  "dependencies": {
+    "mongodb": "^4.7.0"
+  }
+}
