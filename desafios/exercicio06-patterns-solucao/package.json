@@ -1,0 +1,21 @@
+{
+  "name": "@fredowisk/exercicio06-patterns-solucao2",
+  "version": "1.0.0",
+  "description": "The official solution for the 6th EW.IT code challenge.",
+  "main": "jest.config.js",
+  "type": "module",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --watchAll --config ./jest.config.js",
+    "test:dev": "set NODE_OPTIONS=--experimental-vm-modules && npx jest --runInBand --watchAll --config ./jest.config.js"
+  },
+  "keywords": [],
+  "author": "fredowisk && Wells",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.3.0"
+  }
+}
